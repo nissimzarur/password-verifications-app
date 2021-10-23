@@ -3,10 +3,10 @@ import { StyleSheet, Text, View } from "react-native";
 import AnimatedLoader from "react-native-animated-loader";
 import LoaderAnim from "./Loader.json";
 
-const Loader = ({isLoading=false}) => {
+const Loader = () => {
   return (
     <AnimatedLoader
-      visible={isLoading}
+      visible={true}
       overlayColor="rgba(255,255,255,0.75)"
       source={LoaderAnim}
       animationStyle={styles.lottie}
@@ -20,8 +20,8 @@ const Loader = ({isLoading=false}) => {
 export default Loader;
 
 const styles = StyleSheet.create({
-	lottie: {
-	  width: 100,
-	  height: 100
-	}
-  });
+  lottie: {
+    width: 100,
+    height: 100,
+  },
+});
