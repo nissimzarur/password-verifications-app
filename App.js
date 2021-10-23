@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as encoding from "text-encoding";
 import {
   StyleSheet,
@@ -40,6 +40,17 @@ const PasswordMatchView = () => {
   const [showMinOfNumericError, setMinOfNumericError] = useState(true);
   const [passwords, setPasswords] = useState({ first: "", second: "" });
   const [passwordsIsValid, setPasswordsIsValid] = useState(false);
+
+  const clearForm = () => {
+    setPasswords({ first: "", second: "" });
+    setMinOfLowercaseError(true);
+    setMinOfUppercaseError(true);
+    setMinOfNumericError(true);
+    setShowPasswordMatchError(true);
+    setShowPasswordLengthError(true);
+    setPasswordsIsValid(false);
+    return;
+  };
 
   const onPasswordChangeHandler = async (newText, field) => {
     //Check if valid.
@@ -139,7 +150,8 @@ const PasswordMatchView = () => {
         showMinOfNumericError={showMinOfNumericError}
         passwordsIsValid={passwordsIsValid}
         passwords={passwords}
-        setPasswords={setPasswords}
+        clearForm={clearForm}
+        onPasswordChangeHandler={onPasswordChangeHandler}
       />
     </View>
   );
@@ -153,7 +165,8 @@ const PasswordErrors = ({
   showMinOfNumericError,
   passwordsIsValid,
   passwords,
-  setPasswords,
+  clearForm,
+  onPasswordChangeHandler,
 }) => {
   return (
     <View>
@@ -203,13 +216,19 @@ const PasswordErrors = ({
       <SendButton
         passwordsIsValid={passwordsIsValid}
         passwords={passwords}
-        setPasswords={setPasswords}
+        onPasswordChangeHandler={onPasswordChangeHandler}
+        clearForm={clearForm}
       />
     </View>
   );
 };
 
-const SendButton = ({ passwordsIsValid, passwords, setPasswords }) => {
+const SendButton = ({
+  passwordsIsValid,
+  passwords,
+  onPasswordChangeHandler,
+  clearForm,
+}) => {
   const [errMsg, setErrMsg] = useState(false);
   const [errModalVisible, setErrModalVisible] = useState(false);
   const [user, setUser] = useState({});
@@ -229,8 +248,11 @@ const SendButton = ({ passwordsIsValid, passwords, setPasswords }) => {
       .post(`${API_URL}:${API_PORT}/users/saveUserPassword`, passwords)
       .then((resp) => {
         if (resp.data.success) {
-          setUser(resp.data.user);
-          setSuccModalVisible(true);
+          setTimeout(() => {
+            setIsLoading(false);
+            setUser(resp.data.user);
+            setSuccModalVisible(true);
+          }, 1000);
         }
       })
       .catch((err) => {
@@ -284,7 +306,8 @@ const SendButton = ({ passwordsIsValid, passwords, setPasswords }) => {
         succModalVisible={succModalVisible}
         setSuccModalVisible={setSuccModalVisible}
         user={user}
-        setPasswords={setPasswords}
+        onPasswordChangeHandler={onPasswordChangeHandler}
+        clearForm={clearForm}
       />
       {isLoading && <Loader />}
     </View>

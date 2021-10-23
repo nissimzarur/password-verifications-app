@@ -8,7 +8,8 @@ export default function SuccessModal({
   succModalVisible,
   setSuccModalVisible,
   user,
-  setPasswords,
+  onPasswordChangeHandler,
+  clearForm,
 }) {
   let username = user.username ? user.username : "No user name";
   let userId = user.id ? user.id : "No user id";
@@ -21,7 +22,8 @@ export default function SuccessModal({
         visible={succModalVisible}
         onRequestClose={() => {
           setSuccModalVisible(!succModalVisible);
-          setPasswords({ first: "", second: "" });
+          clearForm();
+          // onPasswordChangeHandler("", "clear");
         }}
       >
         <View style={styles.centeredView}>
@@ -49,7 +51,8 @@ export default function SuccessModal({
               style={[styles.button, styles.buttonClose]}
               onPress={() => {
                 setSuccModalVisible(!succModalVisible);
-                setPasswords({ first: "", second: "" });
+                // onPasswordChangeHandler("", "clear");
+                clearForm();
               }}
             >
               <Text
