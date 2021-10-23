@@ -217,11 +217,13 @@ const SendButton = ({ passwordsIsValid, passwords, setPasswords }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   //Only for testing, need to be outside of project.
-  const API_URL = "http://192.168.1.211";
+  const API_URL = "http://10.100.102.10";
   const API_PORT = 4000;
 
   const onButtonClickHandler = () => {
     if (!passwordsIsValid) return;
+
+    setIsLoading(true);
 
     axios
       .post(`${API_URL}:${API_PORT}/users/saveUserPassword`, passwords)
