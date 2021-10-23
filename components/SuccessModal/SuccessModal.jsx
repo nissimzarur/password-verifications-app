@@ -8,7 +8,6 @@ export default function SuccessModal({
   succModalVisible,
   setSuccModalVisible,
   user,
-  onPasswordChangeHandler,
   clearForm,
 }) {
   let username = user.username ? user.username : "No user name";

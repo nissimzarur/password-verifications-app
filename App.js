@@ -151,7 +151,6 @@ const PasswordMatchView = () => {
         passwordsIsValid={passwordsIsValid}
         passwords={passwords}
         clearForm={clearForm}
-        onPasswordChangeHandler={onPasswordChangeHandler}
       />
     </View>
   );
@@ -166,7 +165,6 @@ const PasswordErrors = ({
   passwordsIsValid,
   passwords,
   clearForm,
-  onPasswordChangeHandler,
 }) => {
   return (
     <View>
@@ -216,19 +214,13 @@ const PasswordErrors = ({
       <SendButton
         passwordsIsValid={passwordsIsValid}
         passwords={passwords}
-        onPasswordChangeHandler={onPasswordChangeHandler}
         clearForm={clearForm}
       />
     </View>
   );
 };
 
-const SendButton = ({
-  passwordsIsValid,
-  passwords,
-  onPasswordChangeHandler,
-  clearForm,
-}) => {
+const SendButton = ({ passwordsIsValid, passwords, clearForm }) => {
   const [errMsg, setErrMsg] = useState(false);
   const [errModalVisible, setErrModalVisible] = useState(false);
   const [user, setUser] = useState({});
@@ -306,7 +298,6 @@ const SendButton = ({
         succModalVisible={succModalVisible}
         setSuccModalVisible={setSuccModalVisible}
         user={user}
-        onPasswordChangeHandler={onPasswordChangeHandler}
         clearForm={clearForm}
       />
       {isLoading && <Loader />}
