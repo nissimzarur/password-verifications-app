@@ -54,11 +54,11 @@ const PasswordMatchView = () => {
 
   const onPasswordChangeHandler = async (newText, field) => {
     //Check if valid.
-    let minOfLowercaseError = "";
-    let minOfUppercaseError = "";
-    let minOfNumericError = "";
-    let passwordMatchAndFullfield = "";
-
+    let minOfLowercaseError = false;
+    let minOfUppercaseError = false;
+    let minOfNumericError = false;
+    let passwordMatchAndFullfield = false;
+	
     if (field == "first") {
       setShowPasswordLengthError(parseInt(newText.length) >= 6 ? false : true);
 
@@ -72,7 +72,7 @@ const PasswordMatchView = () => {
       minOfLowercaseError = minOfLowercaseSchema({
         password: newText,
       }).error;
-      setMinOfLowercaseError(minOfLowercaseError);
+      setMinOfLowercaseError(minOfLowercaseError?true:false);
 
       const minOfUppercaseSchema = (input) =>
         Joi.object({
@@ -84,7 +84,7 @@ const PasswordMatchView = () => {
       minOfUppercaseError = minOfUppercaseSchema({
         password: newText,
       }).error;
-      setMinOfUppercaseError(minOfUppercaseError);
+      setMinOfUppercaseError(minOfUppercaseError?true:false);
 
       const minOfNumericSchema = (input) =>
         Joi.object({
@@ -94,26 +94,21 @@ const PasswordMatchView = () => {
         }).validate(input);
 
       minOfNumericError = minOfNumericSchema({ password: newText }).error;
-      setMinOfNumericError(minOfNumericError);
+      setMinOfNumericError(minOfNumericError?true:false);
 
-      setShowPasswordMatchError(
-        (passwordMatchAndFullfield =
-          newText == passwords.second && newText != "" ? false : true)
-      );
+      setShowPasswordMatchError(passwordMatchAndFullfield = !(newText == passwords.second && newText != ""));
       setPasswords({ ...passwords, first: newText });
     } else if (field == "second") {
-      setShowPasswordMatchError(
-        (passwordMatchAndFullfield =
-          newText == passwords.first && newText != "" ? false : true)
-      );
+      setShowPasswordMatchError(passwordMatchAndFullfield = !(newText == passwords.first && newText != ""));
       setPasswords({ ...passwords, second: newText });
     }
 
     setPasswordsIsValid(
-      !minOfLowercaseError &&
-        !minOfUppercaseError &&
-        !minOfNumericError &&
-        !passwordMatchAndFullfield
+      !showMinOfNumericError &&
+        !showMinOfUppercaseError &&
+        !showMinOfLowercaseError &&
+		!showPasswordLengthError&&
+		!passwordMatchAndFullfield
     );
   };
 
